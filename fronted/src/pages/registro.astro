@@ -1,0 +1,95 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+import { registrarCliente } from '../lib/api.js';
+
+let error = '';
+
+if (Astro.request.method === 'POST') {
+  const datos = await Astro.request.formData();
+
+  const cliente = {
+    nombre_completo: datos.get('nombre_completo')?.toString().trim() ?? '',
+    documento: datos.get('documento')?.toString().trim() ?? '',
+    telefono: datos.get('telefono')?.toString().trim() ?? '',
+    correo: datos.get('correo')?.toString().trim() ?? '',
+    password: datos.get('password')?.toString() ?? '',
+  };
+
+  try {
+    if (!cliente.nombre_completo || !cliente.documento || !cliente.telefono || !cliente.correo || !cliente.password) {
+      throw new Error('Todos los campos son obligatorios.');
+    }
+
+    await registrarCliente(cliente);
+    return Astro.redirect('/login');
+  } catch (e) {
+    error = e instanceof Error ? e.message : 'No se pudo registrar el cliente';
+  }
+}
+---
+<Layout title="Registrar Cliente - Servicio Técnico">
+  <main class="pantalla-centrada">
+    <div class="ticket">
+      <h1>Registrar Nuevo Cliente</h1>
+
+      {error && <p class="error-msg">{error}</p>}
+
+      <form method="POST" id="clienteForm" novalidate>
+        <label>
+          Nombre completo
+          <input type="text" name="nombre_completo" placeholder="Ej: Juan Pérez" required minlength="3" />
+        </label>
+
+        <label>
+          Documento de identidad
+          <input type="text" name="documento" placeholder="Ej: 10203040" inputmode="numeric" pattern="[0-9]{5,20}" required />
+        </label>
+
+        <label>
+          Teléfono / Celular
+          <input type="tel" name="telefono" placeholder="Ej: 3001234567" pattern="[0-9]{7,15}" required />
+        </label>
+
+        <label>
+          Correo electrónico
+          <input type="email" name="correo" placeholder="juan@email.com" required />
+        </label>
+
+        <label>
+          Contraseña
+          <input type="password" name="password" required minlength="6" />
+        </label>
+
+        <button type="submit">Guardar Cliente</button>
+      </form>
+
+      <p class="enlace-secundario">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const form = document.getElementById('clienteForm') as HTMLFormElement | null;
+
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      const docInput = form.querySelector('[name="documento"]') as HTMLInputElement;
+      const emailInput = form.querySelector('[name="correo"]') as HTMLInputElement;
+
+      if (docInput && !/^\d+$/.test(docInput.value)) {
+        e.preventDefault();
+        alert('El documento solo debe contener valores numéricos.');
+        docInput.focus();
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (emailInput && !emailRegex.test(emailInput.value)) {
+        e.preventDefault();
+        alert('Ingrese un correo electrónico válido.');
+        emailInput.focus();
+      }
+    });
+  }
+</script>

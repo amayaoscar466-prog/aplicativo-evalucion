@@ -1,7 +1,7 @@
 // controllers/auth.controller.ts
 import { z, create, getNumericDate, bcrypt } from "../dependencias.ts";
 import type { Context } from "../dependencias.ts";
-import { client } from "../Models/database.ts";
+import { client } from "../models/database.ts";
 import { key } from "../Middlewares/auth.middleware.ts";
 import { enviarCorreoVerificacionCuenta } from "../services/email.service.ts";
 
