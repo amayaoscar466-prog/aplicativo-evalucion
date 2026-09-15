@@ -1,0 +1,15 @@
+{
+  "imports": {
+    "oak/": "https://deno.land/x/oak@v17.2.0/",
+    "mysql/": "https://deno.land/x/mysql@v2.12.1/",
+    "djwt/": "https://deno.land/x/djwt@v3.0.2/",
+    "zod": "https://deno.land/x/zod@v3.24.4/mod.ts",
+    "cors/": "https://deno.land/x/cors@v1.2.2/",
+    "bcryptjs": "npm:bcryptjs@2.4.3",
+    "dotenv/": "https://deno.land/std@0.224.0/dotenv/",
+    "denomailer/": "https://deno.land/x/denomailer@1.6.0/"
+  },
+  "tasks": {
+    "dev": "deno run --allow-net --allow-env --allow-read --watch main.ts"
+  }
+}
