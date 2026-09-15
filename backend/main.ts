@@ -4,9 +4,9 @@ import { conectarDB } from "./Models/database.ts";
 
 import authRoutes from "./Routes/auth.routes.ts";
 import clientesRoutes from "./Routes/clientes.routes.ts";
-import equiposRoutes from "./Routes/equipos.routes.ts";
-import tecnicosRoutes from "./Routes/ordenes.routes.ts";
-import ordenesRoutes from "./Routes/tecnicos.routes.ts";
+import equiposRoutes from "./Routes/auth.routes.ts";
+import tecnicosRoutes from "./Routes/tecnicos.routes.ts";
+import ordenesRoutes from "./Routes/ordenes.routes.ts";
 
 const app = new Application();
 
@@ -19,8 +19,8 @@ app.use(oakCors());
 app.use(async (ctx, next) => {
   try {
     await next();
-  } catch (error : any ) {
-    console.error(error );
+  } catch (error : any) {
+    console.error(error);
     ctx.response.status = error.status || 500;
     ctx.response.body = { error: error.message || "Error interno del servidor" };
   }
